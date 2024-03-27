@@ -1,17 +1,21 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Button, Typography } from '@mui/material';
+import { TimerProps } from '../types/TimerProps';
+import { TimerState } from '../types/TimerState';
 
-const Timer: React.FC = () => {
-    const [isRunning, setIsRunning] = useState(false);
+const Timer: React.FC<TimerProps> = ({ initialTime = 0 }) => {
+    const [state, setState] = useState<TimerState>({
+        isRunning: false,
+        time: initialTime,
+    });
     const [time, setTime] = useState(0);
 
     const startPauseResumeTimer = useCallback(() => {
-        setIsRunning(prevState => !prevState);
+        setState(prevState => ({ ...prevState, isRunning: !prevState.isRunning }));
     }, []);
 
     const resetTimer = useCallback(() => {
-        setTime(0);
-        setIsRunning(false);
+        setState({ isRunning: false, time: initialTime });
     }, []);
 
     const formatTime = useMemo(() => {
@@ -26,7 +30,7 @@ const Timer: React.FC = () => {
 
     useEffect(() => {
         let interval: NodeJS.Timeout | undefined;
-        if (isRunning) {
+        if (state.isRunning) {
             interval = setInterval(() => {
                 setTime(prevTime => prevTime + 10);
             }, 10);
@@ -34,7 +38,7 @@ const Timer: React.FC = () => {
             clearInterval(interval);
         }
         return () => clearInterval(interval);
-    }, [isRunning]);
+    }, [state.isRunning]);
 
     return (
         <div style={{ textAlign: 'center' }}>
@@ -54,7 +58,7 @@ const Timer: React.FC = () => {
                 {formatTime}
             </Box>
             <Button variant='contained' color='primary' onClick={startPauseResumeTimer} style={{ marginRight: 10 }}>
-                {isRunning ? 'Pause' : 'Start'}
+                {state.isRunning ? 'Pause' : 'Start'}
             </Button>
             <Button variant='outlined' color='secondary' onClick={resetTimer}>
                 Reset
