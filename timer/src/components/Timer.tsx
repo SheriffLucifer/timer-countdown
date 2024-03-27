@@ -8,7 +8,6 @@ const Timer: React.FC<TimerProps> = ({ initialTime = 0 }) => {
         isRunning: false,
         time: initialTime,
     });
-    const [time, setTime] = useState(0);
 
     const startPauseResumeTimer = useCallback(() => {
         setState(prevState => ({ ...prevState, isRunning: !prevState.isRunning }));
@@ -19,20 +18,20 @@ const Timer: React.FC<TimerProps> = ({ initialTime = 0 }) => {
     }, []);
 
     const formatTime = useMemo(() => {
-        const minutes = Math.floor(time / 60000);
-        const seconds = Math.floor((time % 60000) / 1000);
-        const millisrconds = Math.floor((time % 1000) / 10);
+        const minutes = Math.floor(state.time / 60000);
+        const seconds = Math.floor((state.time % 60000) / 1000);
+        const millisrconds = Math.floor((state.time % 1000) / 10);
 
         return `${String(minutes).padStart(2, '0')}:
         ${String(seconds).padStart(2, '0')}:
         ${String(millisrconds).padStart(2, '0')}`;
-    }, [time]);
+    }, [state.time]);
 
     useEffect(() => {
         let interval: NodeJS.Timeout | undefined;
         if (state.isRunning) {
             interval = setInterval(() => {
-                setTime(prevTime => prevTime + 10);
+                setState(prevState => ({ ...prevState, time: prevState.time + 10 }));
             }, 10);
         } else {
             clearInterval(interval);
