@@ -14,7 +14,7 @@ const Timer: React.FC<TimerProps> = ({ initialTime = 0 }) => {
     }, []);
 
     const resetTimer = useCallback(() => {
-        setState({ isRunning: false, time: initialTime });
+        setState({ isRunning: false, time: 0 });
     }, []);
 
     const formatTime = useMemo(() => {
