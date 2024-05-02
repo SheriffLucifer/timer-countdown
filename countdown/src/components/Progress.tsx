@@ -11,7 +11,7 @@ const Progress: React.FC<ProgressProps> = ({ totalSeconds, initialMinutes, initi
             <Typography level='h3'>
                 Time Remaining: {minutes} minutes {seconds} seconds
             </Typography>
-            <Typography level='h3'>Progress: {totalSeconds ? progressPercentage : 0}% completed</Typography>
+            <Typography level='h3'>Progress: {totalSeconds ? progressPercentage : 100}% completed</Typography>
         </div>
     );
 };
